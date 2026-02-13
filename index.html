@@ -69,12 +69,6 @@ button {
     position: relative;
 }
 
-.foreverBtn {
-    background: white;
-    color: #ff4e8a;
-    font-weight: bold;
-}
-
 .hidden {
     display: none;
 }
@@ -96,15 +90,6 @@ button {
 .shake {
     animation: shake 0.4s;
 }
-
-.fade {
-    animation: fadeIn 1s ease forwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
 </style>
 </head>
 
@@ -124,12 +109,10 @@ button {
     <p id="message"></p>
 </div>
 
-<div class="container hidden fade" id="finalScreen">
-    <h1>Forever ❤️</h1>
-    <br>
-    <button class="foreverBtn" onclick="showFinalMessage()">Forever</button>
-    <p id="finalMessage" class="hidden" style="margin-top:15px;font-weight:bold;">
-        I knew you would say yes 😌
+<div class="container hidden" id="finalScreen">
+    <button id="foreverBtn">Forever ❤️</button>
+    <p id="finalMessage" style="display:none; margin-top:15px; font-weight:bold; font-size:22px;">
+        Always ❤️
     </p>
 </div>
 
@@ -164,9 +147,12 @@ function moveNo() {
     noBtn.style.top = y + "px";
 }
 
-function showFinalMessage() {
-    document.getElementById("finalMessage").classList.remove("hidden");
-}
+document.addEventListener("DOMContentLoaded", function () {
+    const foreverBtn = document.getElementById("foreverBtn");
+    foreverBtn.addEventListener("click", function () {
+        document.getElementById("finalMessage").style.display = "block";
+    });
+});
 
 /* Floating hearts generator */
 setInterval(() => {
