@@ -6,253 +6,309 @@
 <title>For You ❤️</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
 }
 
-body {
-    overflow-x: hidden;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #ff4e8a, #ff8fb1);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: white;
-    position: relative;
-    transition: 0.5s ease;
+body{
+overflow-x:hidden;
+min-height:100vh;
+background:linear-gradient(to top,#ffd6e8,#ffeef6,#dff4ff);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+color:#5a2a4a;
+position:relative;
 }
 
-/* Blur mode */
-.blur-bg {
-    backdrop-filter: blur(8px);
+/* Glowing Sun */
+.sun{
+position:absolute;
+top:60px;
+right:80px;
+width:150px;
+height:150px;
+background:radial-gradient(circle,#fff6c1,#ffd36b);
+border-radius:50%;
+filter:blur(2px);
+animation:pulse 6s infinite alternate;
+z-index:1;
 }
 
-/* Floating hearts */
-.heart {
-    position: absolute;
-    font-size: 18px;
-    animation: float 6s linear infinite;
-    opacity: 0.7;
+@keyframes pulse{
+from{transform:scale(1);}
+to{transform:scale(1.1);}
 }
 
-@keyframes float {
-    0% { transform: translateY(100vh); opacity: 0; }
-    50% { opacity: 1; }
-    100% { transform: translateY(-10vh); opacity: 0; }
+/* Clouds */
+.cloud{
+position:absolute;
+width:200px;
+height:80px;
+background:rgba(255,255,255,0.6);
+border-radius:50px;
+filter:blur(8px);
+animation:floatCloud 40s linear infinite;
+z-index:1;
 }
 
-.container {
-    z-index: 10;
-    padding: 20px;
+@keyframes floatCloud{
+0%{left:-250px;}
+100%{left:110%;}
 }
 
-button {
-    padding: 12px 28px;
-    margin: 12px;
-    font-size: 18px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: 0.3s ease;
+.container{
+z-index:5;
+padding:20px;
 }
 
-.yes {
-    background: white;
-    color: #ff4e8a;
-    font-weight: bold;
+/* Buttons */
+button{
+padding:12px 28px;
+margin:12px;
+font-size:18px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+background:#ff8fb1;
+color:white;
+transition:0.3s;
 }
 
-.no {
-    background: black;
-    color: white;
-    position: relative;
+button:hover{
+transform:scale(1.05);
 }
 
-.hidden {
-    display: none;
+.no{
+background:black;
+}
+
+/* Sakura petals */
+.petal{
+position:absolute;
+width:12px;
+height:12px;
+background:pink;
+border-radius:50% 50% 50% 0;
+opacity:0.8;
+animation:fall linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh) rotate(0deg);opacity:0;}
+20%{opacity:1;}
+100%{transform:translateY(110vh) rotate(360deg);opacity:0;}
+}
+
+/* Name Reveal */
+.nameReveal{
+font-size:28px;
+font-weight:bold;
+opacity:0;
+animation:fadeIn 3s forwards;
+margin-bottom:15px;
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
 }
 
 /* Carousel */
-.carousel {
-    margin-top: 20px;
-    width: 260px;
-    height: 350px;
-    overflow: hidden;
-    border-radius: 20px;
-    box-shadow: 0 0 30px rgba(255,255,255,0.7);
-    position: relative;
+.carousel{
+margin-top:20px;
+width:260px;
+height:350px;
+overflow:hidden;
+border-radius:20px;
+box-shadow:0 0 40px rgba(255,182,193,0.7);
 }
 
-.carousel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-    border-radius: 20px;
+.carousel img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:none;
+border-radius:20px;
 }
 
-.carousel img.active {
-    display: block;
+.carousel img.active{
+display:block;
+}
+
+.hidden{
+display:none;
 }
 
 /* Heart burst */
-.burst {
-    position: absolute;
-    font-size: 20px;
-    animation: burstAnim 1s ease forwards;
+.burst{
+position:absolute;
+font-size:20px;
+animation:burstAnim 1s ease forwards;
 }
 
-@keyframes burstAnim {
-    0% { transform: scale(0.5); opacity: 1; }
-    100% { transform: translateY(-150px) scale(1.5); opacity: 0; }
+@keyframes burstAnim{
+0%{transform:scale(0.5);opacity:1;}
+100%{transform:translateY(-150px) scale(1.5);opacity:0;}
 }
 </style>
 </head>
 
 <body>
 
+<div class="sun"></div>
+<div class="cloud" style="top:120px;"></div>
+<div class="cloud" style="top:220px; animation-duration:60s;"></div>
+
 <div class="container" id="startScreen">
-    <h1>Tap to Begin 💌</h1>
-    <button onclick="startApp()">Start</button>
+<h1>Tap to Begin 💌</h1>
+<button onclick="startApp()">Start</button>
 </div>
 
 <div class="container hidden" id="mainScreen">
-    <h1>Will you be mine? 💘</h1>
-    <button class="yes" onclick="sayYes()">YES 💖</button>
-    <button class="no" id="noBtn" onclick="moveNo()">NO 😤</button>
-    <p id="message"></p>
+<h1>Will you be mine? 💘</h1>
+<button onclick="sayYes()">YES 💖</button>
+<button class="no" id="noBtn" onclick="moveNo()">NO 😤</button>
+<p id="message"></p>
 </div>
 
 <div class="container hidden" id="finalScreen">
-    <button id="foreverBtn">Forever? ❤️</button>
+<div class="nameReveal">For You, My Love 💖</div>
 
-    <p id="finalMessage" class="hidden" style="margin-top:15px; font-weight:bold; font-size:22px;">
-        Always ❤️
-    </p>
+<button id="foreverBtn">Forever? ❤️</button>
 
-    <div id="carouselContainer" class="hidden">
-        <div class="carousel" id="carousel">
-            <img src="photo1.jpg" class="active">
-            <img src="photo2.jpg">
-            <img src="photo3.jpg">
-            <img src="photo4.jpg">
-            <img src="photo5.jpg">
-        </div>
-    </div>
+<p id="finalMessage" class="hidden" style="margin-top:15px;font-size:22px;font-weight:bold;">
+Always ❤️
+</p>
+
+<div id="carouselContainer" class="hidden">
+<div class="carousel" id="carousel">
+<img src="photo1.jpg" class="active">
+<img src="photo2.jpg">
+<img src="photo3.jpg">
+<img src="photo4.jpg">
+<img src="photo5.jpg">
+</div>
+</div>
 </div>
 
-<audio id="bgMusic" src="music.mp3"></audio>
+<audio id="bgMusic" src="music.mp3" loop></audio>
 
 <script>
-function startApp() {
-    document.getElementById("startScreen").classList.add("hidden");
-    document.getElementById("mainScreen").classList.remove("hidden");
-}
 
-function sayYes() {
-    document.getElementById("bgMusic").play();
-    document.getElementById("mainScreen").classList.add("hidden");
-    document.getElementById("finalScreen").classList.remove("hidden");
-}
-
-function moveNo() {
-    const noBtn = document.getElementById("noBtn");
-    const message = document.getElementById("message");
-
-    message.innerHTML = "EHHHHH 😤 Wrong answer!!";
-
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 100);
-
-    noBtn.style.position = "absolute";
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-}
-
+/* Autoplay music */
 document.addEventListener("DOMContentLoaded", function () {
+const music=document.getElementById("bgMusic");
 
-    const foreverBtn = document.getElementById("foreverBtn");
-    const finalMessage = document.getElementById("finalMessage");
-    const carouselContainer = document.getElementById("carouselContainer");
-    const body = document.body;
+function playMusic(){
+music.play().catch(()=>{});
+}
 
-    foreverBtn.addEventListener("click", function () {
-        finalMessage.classList.remove("hidden");
-        carouselContainer.classList.remove("hidden");
-        body.classList.add("blur-bg");
-
-        heartBurst();
-        startCarousel();
-        enableSwipe();
-    });
+playMusic();
+document.body.addEventListener("click",playMusic,{once:true});
 });
 
-/* Carousel auto */
-let index = 0;
+function startApp(){
+document.getElementById("startScreen").classList.add("hidden");
+document.getElementById("mainScreen").classList.remove("hidden");
+}
+
+function sayYes(){
+document.getElementById("mainScreen").classList.add("hidden");
+document.getElementById("finalScreen").classList.remove("hidden");
+}
+
+function moveNo(){
+const noBtn=document.getElementById("noBtn");
+document.getElementById("message").innerHTML="EHHHHH 😤 Wrong answer!!";
+noBtn.style.position="absolute";
+noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
+noBtn.style.top=Math.random()*(window.innerHeight-100)+"px";
+}
+
+/* Forever logic */
+document.addEventListener("DOMContentLoaded",function(){
+const foreverBtn=document.getElementById("foreverBtn");
+const finalMessage=document.getElementById("finalMessage");
+const carouselContainer=document.getElementById("carouselContainer");
+
+foreverBtn.addEventListener("click",function(){
+finalMessage.classList.remove("hidden");
+carouselContainer.classList.remove("hidden");
+heartBurst();
+startCarousel();
+enableSwipe();
+
+/* Remove Forever button */
+foreverBtn.style.display="none";
+});
+});
+
+/* Carousel */
+let index=0;
 let images;
 
-function startCarousel() {
-    images = document.querySelectorAll(".carousel img");
-    setInterval(nextSlide, 3000);
+function startCarousel(){
+images=document.querySelectorAll(".carousel img");
+setInterval(nextSlide,3000);
 }
 
-function nextSlide() {
-    images[index].classList.remove("active");
-    index = (index + 1) % images.length;
-    images[index].classList.add("active");
+function nextSlide(){
+images[index].classList.remove("active");
+index=(index+1)%images.length;
+images[index].classList.add("active");
 }
 
-/* Swipe Support */
-function enableSwipe() {
-    const carousel = document.getElementById("carousel");
-    let startX = 0;
-
-    carousel.addEventListener("touchstart", e => {
-        startX = e.touches[0].clientX;
-    });
-
-    carousel.addEventListener("touchend", e => {
-        let endX = e.changedTouches[0].clientX;
-        if (startX > endX + 50) nextSlide();
-        if (startX < endX - 50) prevSlide();
-    });
+function prevSlide(){
+images[index].classList.remove("active");
+index=(index-1+images.length)%images.length;
+images[index].classList.add("active");
 }
 
-function prevSlide() {
-    images[index].classList.remove("active");
-    index = (index - 1 + images.length) % images.length;
-    images[index].classList.add("active");
+/* Swipe */
+function enableSwipe(){
+const carousel=document.getElementById("carousel");
+let startX=0;
+
+carousel.addEventListener("touchstart",e=>{
+startX=e.touches[0].clientX;
+});
+
+carousel.addEventListener("touchend",e=>{
+let endX=e.changedTouches[0].clientX;
+if(startX>endX+50) nextSlide();
+if(startX<endX-50) prevSlide();
+});
 }
 
-/* Heart burst effect */
-function heartBurst() {
-    for (let i = 0; i < 15; i++) {
-        const heart = document.createElement("div");
-        heart.innerHTML = "❤️";
-        heart.classList.add("burst");
-        heart.style.left = Math.random() * window.innerWidth + "px";
-        heart.style.top = window.innerHeight / 2 + "px";
-        document.body.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 1000);
-    }
+/* Heart Burst */
+function heartBurst(){
+for(let i=0;i<15;i++){
+const heart=document.createElement("div");
+heart.innerHTML="❤️";
+heart.classList.add("burst");
+heart.style.left=Math.random()*window.innerWidth+"px";
+heart.style.top=window.innerHeight/2+"px";
+document.body.appendChild(heart);
+setTimeout(()=>heart.remove(),1000);
+}
 }
 
-/* Floating hearts */
-setInterval(() => {
-    const heart = document.createElement("div");
-    heart.classList.add("heart");
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 20 + 12 + "px";
-    document.body.appendChild(heart);
+/* Sakura */
+setInterval(()=>{
+const petal=document.createElement("div");
+petal.classList.add("petal");
+petal.style.left=Math.random()*100+"vw";
+petal.style.animationDuration=(Math.random()*3+5)+"s";
+petal.style.background=Math.random()>0.5?"#ffc0cb":"#ffb7d5";
+document.body.appendChild(petal);
+setTimeout(()=>petal.remove(),8000);
+},300);
 
-    setTimeout(() => heart.remove(), 6000);
-}, 300);
 </script>
 
 </body>
