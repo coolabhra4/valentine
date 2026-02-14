@@ -22,6 +22,7 @@ align-items:center;
 text-align:center;
 color:white;
 position:relative;
+transition:4s ease;
 
 /* Sakura Road Background */
 background:
@@ -49,6 +50,7 @@ padding:25px;
 background:rgba(0,0,0,0.35);
 border-radius:20px;
 backdrop-filter:blur(6px);
+transition:1s ease;
 }
 
 /* Buttons */
@@ -90,7 +92,7 @@ opacity:0;
 }
 20%{opacity:1;}
 100%{
-transform:translateY(110vh) translateX(80px) rotate(360deg);
+transform:translateY(110vh) translateX(var(--driftX)) rotate(360deg);
 opacity:0;
 }
 }
@@ -103,25 +105,41 @@ height:350px;
 overflow:hidden;
 border-radius:20px;
 box-shadow:0 0 40px rgba(255,182,193,0.7);
+position:relative;
 }
 
 .carousel img{
 width:100%;
 height:100%;
 object-fit:cover;
-display:none;
+position:absolute;
+top:0;
+left:0;
+opacity:0;
+transition:opacity 1s ease;
 border-radius:20px;
 }
 
 .carousel img.active{
-display:block;
+opacity:1;
+}
+
+/* Glow Always */
+#finalMessage{
+text-shadow:0 0 10px pink;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{ text-shadow:0 0 5px pink; }
+to{ text-shadow:0 0 20px hotpink; }
 }
 
 .hidden{
 display:none;
 }
 
-/* Love text animation */
+/* Love text */
 .loveText{
 margin-top:20px;
 font-size:26px;
@@ -180,7 +198,6 @@ Always ❤️
 <img src="photo5.jpg">
 </div>
 
-<!-- I love you text -->
 <div id="loveText" class="loveText hidden">
 I love you ❤️
 </div>
@@ -195,11 +212,7 @@ I love you ❤️
 /* Autoplay music */
 document.addEventListener("DOMContentLoaded",function(){
 const music=document.getElementById("bgMusic");
-
-function playMusic(){
-music.play().catch(()=>{});
-}
-
+function playMusic(){ music.play().catch(()=>{}); }
 playMusic();
 document.body.addEventListener("click",playMusic,{once:true});
 });
@@ -214,12 +227,20 @@ document.getElementById("mainScreen").classList.add("hidden");
 document.getElementById("finalScreen").classList.remove("hidden");
 }
 
+let noCount=0;
+
 function moveNo(){
 const noBtn=document.getElementById("noBtn");
 document.getElementById("message").innerHTML="EHHHHH 😤 Wrong answer!!";
+
 noBtn.style.position="absolute";
 noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
 noBtn.style.top=Math.random()*(window.innerHeight-100)+"px";
+
+noCount++;
+if(noCount>=5){
+noBtn.style.display="none";
+}
 }
 
 /* Forever logic */
@@ -230,13 +251,24 @@ const carouselContainer=document.getElementById("carouselContainer");
 const loveText=document.getElementById("loveText");
 
 foreverBtn.addEventListener("click",function(){
+
 finalMessage.classList.remove("hidden");
 carouselContainer.classList.remove("hidden");
 loveText.classList.remove("hidden");
+
 heartBurst();
 startCarousel();
 enableSwipe();
+
+/* Remove Forever button */
 foreverBtn.style.display="none";
+
+/* Camera zoom + golden warmth */
+document.body.style.transform="scale(1.05)";
+document.body.style.filter="sepia(10%) brightness(1.05)";
+
+/* Background blur focus */
+document.querySelector(".container").style.backdropFilter="blur(10px)";
 });
 });
 
@@ -296,6 +328,7 @@ const petal=document.createElement("div");
 petal.classList.add("petal");
 petal.style.left=Math.random()*100+"vw";
 petal.style.animationDuration=(Math.random()*4+6)+"s";
+petal.style.setProperty('--driftX', (Math.random()*200-100)+'px');
 document.body.appendChild(petal);
 setTimeout(()=>petal.remove(),9000);
 },250);
