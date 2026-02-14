@@ -227,19 +227,33 @@ document.getElementById("mainScreen").classList.add("hidden");
 document.getElementById("finalScreen").classList.remove("hidden");
 }
 
-let noCount=0;
+let noCount = 0;
 
 function moveNo(){
 const noBtn=document.getElementById("noBtn");
 document.getElementById("message").innerHTML="EHHHHH 😤 Wrong answer!!";
 
-noBtn.style.position="absolute";
-noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
-noBtn.style.top=Math.random()*(window.innerHeight-100)+"px";
+const maxX = window.innerWidth - 120;
+const maxY = window.innerHeight - 60;
+
+const x = Math.random() * maxX;
+const y = Math.random() * maxY;
+
+noBtn.style.position="fixed";
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
 
 noCount++;
-if(noCount>=5){
-noBtn.style.display="none";
+
+/* Gradually shrink */
+const scaleAmount = 1 - (noCount * 0.15);
+noBtn.style.transform = `scale(${scaleAmount})`;
+noBtn.style.transition="0.3s ease";
+
+/* Dramatic vanish */
+if(noCount>=6){
+noBtn.style.transform="scale(0)";
+setTimeout(()=>{ noBtn.style.display="none"; },400);
 }
 }
 
@@ -260,7 +274,6 @@ heartBurst();
 startCarousel();
 enableSwipe();
 
-/* Remove Forever button */
 foreverBtn.style.display="none";
 
 /* Camera zoom + golden warmth */
@@ -328,7 +341,7 @@ const petal=document.createElement("div");
 petal.classList.add("petal");
 petal.style.left=Math.random()*100+"vw";
 petal.style.animationDuration=(Math.random()*4+6)+"s";
-petal.style.setProperty('--driftX', (Math.random()*200-100)+'px');
+petal.style.setProperty('--driftX',(Math.random()*200-100)+'px');
 document.body.appendChild(petal);
 setTimeout(()=>petal.remove(),9000);
 },250);
