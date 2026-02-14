@@ -16,54 +16,39 @@ font-family:'Poppins',sans-serif;
 body{
 overflow-x:hidden;
 min-height:100vh;
-background:linear-gradient(to top,#ffd6e8,#ffeef6,#dff4ff);
 display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
-color:#5a2a4a;
+color:white;
 position:relative;
+
+/* Sakura Road Background */
+background:
+linear-gradient(to top, rgba(255,200,220,0.3), rgba(255,240,250,0.6)),
+url('https://images.unsplash.com/photo-1522383225653-ed111181a951?auto=format&fit=crop&w=1500&q=80');
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
 }
 
-/* Glowing Sun */
-.sun{
+body::before{
+content:"";
 position:absolute;
-top:60px;
-right:80px;
-width:150px;
-height:150px;
-background:radial-gradient(circle,#fff6c1,#ffd36b);
-border-radius:50%;
-filter:blur(2px);
-animation:pulse 6s infinite alternate;
-z-index:1;
-}
-
-@keyframes pulse{
-from{transform:scale(1);}
-to{transform:scale(1.1);}
-}
-
-/* Clouds */
-.cloud{
-position:absolute;
-width:200px;
-height:80px;
-background:rgba(255,255,255,0.6);
-border-radius:50px;
-filter:blur(8px);
-animation:floatCloud 40s linear infinite;
-z-index:1;
-}
-
-@keyframes floatCloud{
-0%{left:-250px;}
-100%{left:110%;}
+width:100%;
+height:100%;
+background:rgba(255,180,200,0.2);
+backdrop-filter:blur(2px);
+z-index:0;
 }
 
 .container{
 z-index:5;
-padding:20px;
+padding:25px;
+background:rgba(0,0,0,0.35);
+border-radius:20px;
+backdrop-filter:blur(6px);
 }
 
 /* Buttons */
@@ -87,35 +72,27 @@ transform:scale(1.05);
 background:black;
 }
 
-/* Sakura petals */
+/* Petals */
 .petal{
 position:absolute;
-width:12px;
-height:12px;
-background:pink;
+width:14px;
+height:18px;
+background:linear-gradient(135deg,#ffc0cb,#ff69b4);
 border-radius:50% 50% 50% 0;
-opacity:0.8;
-animation:fall linear infinite;
+opacity:0.9;
+animation:drift linear infinite;
 }
 
-@keyframes fall{
-0%{transform:translateY(-10vh) rotate(0deg);opacity:0;}
-20%{opacity:1;}
-100%{transform:translateY(110vh) rotate(360deg);opacity:0;}
-}
-
-/* Name Reveal */
-.nameReveal{
-font-size:28px;
-font-weight:bold;
+@keyframes drift{
+0%{
+transform:translateY(-10vh) translateX(0) rotate(0deg);
 opacity:0;
-animation:fadeIn 3s forwards;
-margin-bottom:15px;
 }
-
-@keyframes fadeIn{
-from{opacity:0; transform:translateY(10px);}
-to{opacity:1; transform:translateY(0);}
+20%{opacity:1;}
+100%{
+transform:translateY(110vh) translateX(80px) rotate(360deg);
+opacity:0;
+}
 }
 
 /* Carousel */
@@ -144,6 +121,20 @@ display:block;
 display:none;
 }
 
+/* Love text animation */
+.loveText{
+margin-top:20px;
+font-size:26px;
+font-weight:bold;
+opacity:0;
+animation:fadeInLove 2s forwards;
+}
+
+@keyframes fadeInLove{
+from{opacity:0; transform:translateY(10px);}
+to{opacity:1; transform:translateY(0);}
+}
+
 /* Heart burst */
 .burst{
 position:absolute;
@@ -160,24 +151,19 @@ animation:burstAnim 1s ease forwards;
 
 <body>
 
-<div class="sun"></div>
-<div class="cloud" style="top:120px;"></div>
-<div class="cloud" style="top:220px; animation-duration:60s;"></div>
-
 <div class="container" id="startScreen">
 <h1>Tap to Begin 💌</h1>
 <button onclick="startApp()">Start</button>
 </div>
 
 <div class="container hidden" id="mainScreen">
-<h1>Will you be mine? 💘</h1>
+<h1>Will you walk this road with me? 🌸</h1>
 <button onclick="sayYes()">YES 💖</button>
 <button class="no" id="noBtn" onclick="moveNo()">NO 😤</button>
 <p id="message"></p>
 </div>
 
 <div class="container hidden" id="finalScreen">
-<div class="nameReveal">For You, My Love 💖</div>
 
 <button id="foreverBtn">Forever? ❤️</button>
 
@@ -193,6 +179,12 @@ Always ❤️
 <img src="photo4.jpg">
 <img src="photo5.jpg">
 </div>
+
+<!-- I love you text -->
+<div id="loveText" class="loveText hidden">
+I love you ❤️
+</div>
+
 </div>
 </div>
 
@@ -201,7 +193,7 @@ Always ❤️
 <script>
 
 /* Autoplay music */
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded",function(){
 const music=document.getElementById("bgMusic");
 
 function playMusic(){
@@ -235,15 +227,15 @@ document.addEventListener("DOMContentLoaded",function(){
 const foreverBtn=document.getElementById("foreverBtn");
 const finalMessage=document.getElementById("finalMessage");
 const carouselContainer=document.getElementById("carouselContainer");
+const loveText=document.getElementById("loveText");
 
 foreverBtn.addEventListener("click",function(){
 finalMessage.classList.remove("hidden");
 carouselContainer.classList.remove("hidden");
+loveText.classList.remove("hidden");
 heartBurst();
 startCarousel();
 enableSwipe();
-
-/* Remove Forever button */
 foreverBtn.style.display="none";
 });
 });
@@ -298,16 +290,15 @@ setTimeout(()=>heart.remove(),1000);
 }
 }
 
-/* Sakura */
+/* Petals */
 setInterval(()=>{
 const petal=document.createElement("div");
 petal.classList.add("petal");
 petal.style.left=Math.random()*100+"vw";
-petal.style.animationDuration=(Math.random()*3+5)+"s";
-petal.style.background=Math.random()>0.5?"#ffc0cb":"#ffb7d5";
+petal.style.animationDuration=(Math.random()*4+6)+"s";
 document.body.appendChild(petal);
-setTimeout(()=>petal.remove(),8000);
-},300);
+setTimeout(()=>petal.remove(),9000);
+},250);
 
 </script>
 
